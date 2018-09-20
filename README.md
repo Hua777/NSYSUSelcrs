@@ -2,6 +2,10 @@
 
 中山大學網路選課系統
 
+## 新功能
+
+Keras 神經網絡，辨識學校的 4 碼登入驗證碼，加速登入。
+
 ## 目的
 
 取代原本學校極為老舊的選課系統，利用爬蟲的方式，重建一個較接近現代的網頁，並增加便利的功能優化與加速選課流程。
@@ -19,8 +23,9 @@
 5. 安裝此專案所需的 Python 套件。
 
     ```
-    opencc-python
-    pymysql-python
+    keras
+    opencc-python-reimplemented
+    PyMySQL
     BeautifulSoup4
     flask
     ```
