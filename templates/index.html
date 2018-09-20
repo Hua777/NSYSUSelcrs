@@ -1,0 +1,76 @@
+{% extends "_base.html" %}
+{% block title %}中山大學選課系統{% endblock %}
+{% block jbtp %}
+{{ agent.Stage }}
+{% endblock %}
+{% block jbt %}
+{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class='col-md-6'>
+            <ul class="list-group m-3">
+                <li class="list-group-item list-group-item-dark">注意事項</li>
+                <li class="list-group-item">提供快速查詢<span class="badge badge-danger">點選人數</span>、<span class="badge badge-danger">剩餘人數</span>等。</li>
+                <li class="list-group-item">選單找尋<span class="badge badge-danger">課程查詢</span>或<span class="badge badge-danger">課程登記</span>快速選課。</li>
+                <li class="list-group-item">直接點選<span class="badge badge-danger">加選</span>(加號)加入喜好的課程。</li>
+                <li class="list-group-item">直接點選<span class="badge badge-danger">退選</span>(減號)去除不要的課程。</li>
+                <li class="list-group-item">提供<span class="badge badge-danger">簡體字</span>查詢課程。</li>
+                <li class="list-group-item">強大的支援<span class="badge badge-danger">手機板</span>。</li>
+                <li class="list-group-item">系統尚不穩定？隨時會關掉重啟。重啟後必須重新登入。</li>
+                <li class="list-group-item">本校生帳號：<span class="badge badge-danger">學號</span>；<br />外校生：<span class="badge badge-danger">身份證字號</span>。</li>
+                <li class="list-group-item">本校生選課密碼預設值：<span class="badge badge-danger">身分證末六碼</span>。<br />
+                    外校生：<span class="badge badge-danger">自行設定</span>之密碼。</li>
+                <li class="list-group-item">同階段選上機率相同，不需急於第一天選課。<br />請查妥課號再選課，以加速選課作業時間。</li>
+                <li class="list-group-item">學生登錄選課系統前，請詳閱<a href='http://oaa.nsysu.edu.tw/files/15-1004-20388,c2935-1.php' target='blank'>選課須知</a>。</li>
+            </ul>
+        </div>
+        <div class='col-md-6'>
+            <ul class="list-group m-3" id='times'>
+                <li class="list-group-item list-group-item-dark">系統公告</li>
+                <li class="list-group-item">初選一：107.08.16(09:00) ~ 107.08.20(17:00)</li>
+                <li class="list-group-item">初選一公佈：107.08.21(14:00)</li>
+                <li class="list-group-item">初選二：107.08.23(09:00) ~ 107.08.27(17:00)</li>
+                <li class="list-group-item">初選二公佈：107.08.29(14:00)</li>
+                <li class="list-group-item">加退選一：107.09.13(09:00) ~ 107.09.14(17:00)</li>
+                <li class="list-group-item">加退選一公佈：107.09.17(14:00)</li>
+                <li class="list-group-item">加退選二：107.09.19(09:00) ~ 107.09.20(17:00)</li>
+                <li class="list-group-item">加退選二公佈：107.09.21(14:00)</li>
+                <li class="list-group-item">異常處理：107.09.25(09:00) ~ 107.10.01(17:00)</li>
+                <li class="list-group-item">超修單列印：107.08.16(09:00) ~ 107.09.20(17:00)</li>
+                <li class="list-group-item">棄選時間：107.11.30(09:00) ~ 107.12.07(17:00)</li>
+                <li class="list-group-item">選課確認：107.09.25(09:00) ~ 107.10.08(17:00)</li>
+            </ul>
+        </div>
+    </div>
+    <div class="alert alert-danger" role="alert">
+        2018-09-19 19:13 修復 Bug。伺服器重啟。
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script>
+    $(document).ready(() => {
+        var times = $('#times li');
+        for (var i = 1; i < times.length; ++i) {
+            var ts = $(times[i]).text().split('：')[1].split(' ~ ');
+            for (var j = 0; j < ts.length; ++j) {
+                ts[j] = ts[j].replace('(', ' ');
+                ts[j] = ts[j].replace(')', '');
+                ts[j] = ts[j].split(/[\.\ \:]+/);
+                ts[j][0] = parseInt(ts[j][0]) + 1911;
+                ts[j] = ts[j][0] + '/' + ts[j][1] + '/' + ts[j][2] + ' ' + ts[j][3] + ':' + ts[j][4]
+            }
+            var start = Date.parse(ts[0]);
+            var now = Date.now();
+            var end = start + 60 * 60 * 24;
+            if (ts.length > 1) {
+                end = Date.parse(ts[1]);
+            }
+            if (start <= now && now <= end) {
+                $(times[i]).addClass('red');
+            }
+        }
+    });
+</script>
+{% endblock %}

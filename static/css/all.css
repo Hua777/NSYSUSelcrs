@@ -1,0 +1,21 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+
+* {
+    border-radius: 0 !important;
+}
+
+td {
+    word-break: break-all;
+    font-size: 13px;
+}
+
+.suitable {
+    overflow-x: auto;
+}
+
+.red {
+    background-color: rgba(172, 124, 218, 0.459) !important;
+}

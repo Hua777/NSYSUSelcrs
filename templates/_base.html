@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css">
+    <link rel="stylesheet" href="/css/all.css">
+    {% block css %}{% endblock %}
+</head>
+
+<body>
+    <div class='fixed-top w-100'>
+        <div id='waiting' class="progress">
+            <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar"
+                aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+        </div>
+    </div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="/">中山大學網路選課系統</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">首頁</a>
+                </li>
+                {% if agent.Logined %}
+                {% if agent.Stage != '選課關閉' %}
+                <li class="nav-item active">
+                    <a class="nav-link" href="/classes">{{ agent.Stage }}</a>
+                </li>
+                {% endif %}
+                {% if agent.Stage == '選課關閉' %}
+                <li class="nav-item active">
+                    <a class="nav-link" href="/classes">課程查詢</a>
+                </li>
+                {% endif %}
+                <li class="nav-item active">
+                    <a class="nav-link" href="/selected">目前選課資料</a>
+                </li>
+                {% endif %}
+                <li class="nav-item dropdown active">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        其他關於課程
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" target="blank" href="http://selcrs.nsysu.edu.tw/menu4/query/more_credit_cond.asp">超修單</a>
+                        <a class="dropdown-item" target="blank" href="http://selcrs.nsysu.edu.tw/menu4/query/abnormal_list.asp">異常處理</a>
+                        <a class="dropdown-item" target="blank" href="http://selcrs.nsysu.edu.tw/menu4/query/giveuplist.asp">棄選單</a>
+                        <a class="dropdown-item" target="blank" href="http://selcrs.nsysu.edu.tw/">舊網站</a>
+                    </div>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/about">關於</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/feedback">意見回饋</a>
+                </li>
+                {% if agent.Logined %}
+                <li class="nav-item active">
+                    <a class="nav-link" href="/logout">登出</a>
+                </li>
+                {% endif %}
+            </ul>
+            {% set vc = agent.GetValidCode() %}
+            {% if not agent.Logined %}
+            <form class="form-inline">
+                <input type="text" class="form-control form-control-sm mb-2 mr-sm-2" id="usernameTXT" placeholder="學號" required>
+                <input type="password" class="form-control form-control-sm mb-2 mr-sm-2" id="passwordTXT" placeholder="密碼" required>
+                <img src="/img/validcode/{{ vc[0] }}" class='form-control form-control-sm mb-2 mr-sm-2'>
+                <input type="text" class="form-control form-control-sm mb-2 mr-sm-2" id="validcodeTXT" data-src="{{ vc[0] }}"
+                    placeholder="驗證碼" required>
+                <button id='loginBTN' type="button" class="btn btn-primary btn-sm mb-2 form-control">登入</button>
+            </form>
+            {% endif %}
+        </div>
+    </nav>
+    <div class="jumbotron text-center bg-dark text-white">
+        <h1>中山選課系統</h1>
+        {% if agent.Logined %}<h3>你好 {{ agent.Department }} {{ agent.Grade }}年級 {{ agent.Name }} ({{ agent.Id }})</h3>{%
+        endif %}
+        <p>{% block jbtp %}{% endblock %}</p>
+        {% block jbt %}{% endblock %}
+    </div>
+    {% block body %}{% endblock %}
+    <footer class="mt-4 bg-primary page-footer font-small text-white">
+        <div class="footer-copyright text-center py-3">© 2018 Copyright:
+            <a href="https://github.com/Hua777" class='text-white' target="blank">Hua777</a>
+        </div>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="http://www.flotcharts.org/flot/jquery.flot.js"></script>
+    <script src="http://www.flotcharts.org/flot/jquery.flot.pie.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.26.29/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/holder/2.9.4/holder.js"></script>
+    <script src="/js/all.js"></script>
+    {% block js %}{% endblock %}
+</body>
+
+</html>

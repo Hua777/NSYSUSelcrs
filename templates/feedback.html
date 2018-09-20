@@ -1,0 +1,121 @@
+{% extends "_base.html" %}
+{% block title %}中山大學選課系統{% endblock %}
+{% block jbtp %}
+意見回饋：當你發現哪個地方做得特別爛時，或是有特別的想法時，利用此表單告訴我。
+{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="row mb-5">
+        <div class='col-md-12 text-center justify-content-center'>
+            <img src="holder.js/1920x200" class="img-fluid">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card card-body bg-light">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="nameTXT">暱稱</label>
+                            <input type="text" class="form-control" id="nameTXT" placeholder="暱稱" value="{{ agent.Name }}" />
+                        </div>
+                        <div class="form-group">
+                            <label for="emailTXT">Email</label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span>
+                                </span>
+                                <input type="email" class="form-control" id="emailTXT" placeholder="Email" /></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="subjectTXT">主題</label>
+                            <select id="subjectTXT" class="form-control" required="required">
+                                <option value="其他" selected>其他</option>
+                                <option value="建議">建議</option>
+                                <option value="Bug">Bug</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="messageTXT">內容</label>
+                            <textarea id="messageTXT" class="form-control" rows="9" cols="25" placeholder="內容">做了什麼操作：&#13;&#10;出現什麼反應：&#13;&#10;其他：&#13;&#10;</textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-primary float-right" id="feedbackBTN">Send Message</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <legend><i class="fas fa-globe-asia"></i> 其他聯絡方式</legend>
+            <address>
+                <strong>Email</strong><br>
+                <a href="javascript:;">liao.700529@gmail.com</a>
+            </address>
+            <address>
+                <strong>Messenger</strong><br>
+                <a href="https://www.messenger.com/t/Hua777" target="blank">Hua777</a>
+            </address>
+            <address>
+                <strong>WeChat</strong><br>
+                <a href="https://pc.weixin.qq.com/" target="blank">Weihua3480</a>
+            </address>
+            <address>
+                <strong>QQ</strong><br>
+                <a href="mqqwpa://im/chat?chat_type=wpa&uin=2729302759&version=1&src_type=web&web_src=oicqzone.com">2729302759</a>
+            </address>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class='col-md-12 text-center justify-content-center'>
+            <img src="holder.js/1920x200" class="img-fluid">
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script>
+    $('#feedbackBTN').on('click', () => {
+        var msg = $('#messageTXT').val();
+        if (msg == '' || msg.length < 5) {
+            swal({
+                title: '錯誤',
+                text: "你什麼都可以不填，但是內容必須超過五個字。",
+                type: 'error'
+            });
+        } else {
+            Wait();
+            $('#feedbackBTN').prop('disabled', true);
+            $.ajax({
+                type: 'POST',
+                url: '/api/feedback',
+                data: JSON.stringify({
+                    "subject": $('#subjectTXT').val(),
+                    "email": $('#emailTXT').val(),
+                    "name": $('#nameTXT').val(),
+                    "message": $('#messageTXT').val()
+                }),
+                contentType: 'application/json; charset=UTF-8',
+                dataType: 'json',
+                error: (err) => {
+                    Okay();
+                    alert('未知預期錯誤！');
+                },
+                success: (res) => {
+                    Okay();
+                    $('#subjectTXT').val('');
+                    $('#emailTXT').val('');
+                    $('#nameTXT').val('');
+                    $('#messageTXT').val('');
+                    swal({
+                        title: '完成',
+                        text: "感謝您的回饋！",
+                        type: 'success'
+                    });
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

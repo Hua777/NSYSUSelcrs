@@ -1,0 +1,46 @@
+{% extends "_base.html" %}
+{% block title %}關於{% endblock %}
+{% block jbtp %}
+各位小哥哥小姐姐您們好。
+{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class='col-md-12 text-center'>
+            <h2><a href="javascript:
+                    swal({
+                        imageUrl: '/img/donate-alipay.jpg',
+                        imageHeight: 500,
+                        imageAlt: '支付寶 Donate'
+                    })
+                ;">斗內 - Donate</a></h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class='col-md-12'>
+            <h2>關於此網站</h2>
+            <p>使用平台 DigitalOcean 並架設於新加坡，為最便宜的主機，因此<span class="badge badge-danger">效能不高</span>且<span class="badge badge-danger">延遲高</span>。</p>
+            <p>利用 Python 爬蟲技術，以及 Flask 伺服器框架建立而起。也因為使用爬蟲技術且延遲高，導致此伺服器反應並不迅速。</p>
+            <p>本網站<span class="badge badge-danger">不記錄</span>使用者的帳號密碼，但並不打算使用 Https，爬下來的課程存於香港的資料庫，且將於 2018/12
+                過期，過期後此網站也會<span class="badge badge-danger">停止營運</span>。</p>
+            <p>初選階段的時候，還沒開始做這個網站，因此不知道他的表單會提交到哪裡，所以初選階段沒寫出來。</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class='col-md-12'>
+            <h2>關於此作者</h2>
+            <p>作者暱稱 <span class="badge badge-success">Hua777</span>，GitHub 在網站下方。</p>
+            <p>Email: <span class="badge badge-success">liao.700529@gmail.com</span></p>
+            <p>Messenger: <span class="badge badge-success">Hua777</span></p>
+            <p>WeChat: <span class="badge badge-success">Weihua3480</span></p>
+            <p>QQ: <span class="badge badge-success">2729302759</span></p>
+            <p>是個興趣使然的工程師，3 分鐘熱度的工程師。</p>
+            <p>也是個後端工程師，對網頁排版沒啥興趣，能看就好。</p>
+            <p>閒閒沒事花了 1 小時完成此網站的基本功能。</p>
+            <p>沒錢賺所以並不積極開發，如需啥功能請通知我。</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "_base.html" %}
+{% block title %}選課列表{% endblock %}
+{% block jbtp %}
+您可以在這裡看你所選的課，上或沒上。
+{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="row">
+        {% if schedule.Select[0]|length > 0 %}
+        <div class='{% if schedule.Select[1]|length > 0 %}col-md-6{% endif %}{% if schedule.Select[1]|length == 0 %}col-md-12{% endif %}'>
+            <ul class="list-group ">
+                <li class="list-group-item list-group-item-dark">已經選上的課程</li>
+                {% for c in schedule.Select[0] %}
+                <li class="list-group-item">{{ c.Number }} - {{ c.Name }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        {% if schedule.Select[1]|length > 0 %}
+        <div class='col-md-6'>
+            <ul class="list-group">
+                <li class="list-group-item list-group-item-dark">其他課程</li>
+                {% for c in schedule.Select[1] %}
+                <li class="list-group-item">{{ c.Get }} - {{ c.Number }} - {{ c.Name }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+    <div class='row mt-4'>
+        <div class="col-md-4 text-center text-warning">黃色是正在加選</div>
+        <div class="col-md-4 text-center text-danger">紅色是未選上或是失敗</div>
+        <div class="col-md-4 text-center text-success">綠色是已經選上了</div>
+    </div>
+    <div id='schedule' class='row mt-4 suitable'>
+        {{ schedule.ToHtml()|safe }}
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+{% endblock %}
