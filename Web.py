@@ -14,9 +14,12 @@ import time
 from Agent import Agent
 from Schedule import Schedule
 from ClassesDB import ClassesDB as DB
+from ValidCode import ValidCode, LoadForwardData
 
 app = Flask(__name__, static_url_path='')
 app.config['JSON_AS_ASCII'] = False
+
+ValidCodeModel = None
 
 def MyAgent(req):
     try:
@@ -36,12 +39,13 @@ Global = {
 def index():
     try:
         global Global
+        global ValidCodeModel
         a = Global['MyAgent'](request)
         if a is not None and a.Logined:
             return render_template('index.html', agent = a)
         else:
             a = Agent()
-            resp = make_response(render_template('index.html', agent = a))
+            resp = make_response(render_template('index.html', agent = a, vc = ValidCodeModel, vcread = LoadForwardData))
             resp.set_cookie('Id', str(Global['Id']), expires = time.time() + 1 * 60 * 60)
             Global['Agents'][str(Global['Id'])] = a
             Global['Id'] += 1
@@ -53,22 +57,35 @@ def index():
         TB.print_exc()
         return render_template('error.html')
 
-# 登入首页（废弃）
-@app.route('/main', methods=['GET'])
-def main():
-    try:
-        return redirect(url_for('selected'))
-    except:
-        TB.print_exc()
-        return redirect(url_for('logout'))
-
 # 关于
 @app.route('/about', methods=['GET'])
 def about():
     try:
         global Global
+        global ValidCodeModel
         a = Global['MyAgent'](request)
-        return render_template('about.html', agent = a)
+        return render_template('about.html', agent = a, vc = ValidCodeModel, vcread = LoadForwardData)
+    except:
+        TB.print_exc()
+        return redirect(url_for('logout'))
+
+# 课程查询
+@app.route('/feedback', methods=['GET'])
+def feedback():
+    try:
+        global Global
+        global ValidCodeModel
+        a = Global['MyAgent'](request)
+        return render_template('feedback.html', agent = a, vc = ValidCodeModel, vcread = LoadForwardData)
+    except:
+        TB.print_exc()
+        return redirect(url_for('logout'))
+
+# 登入首页（废弃）
+@app.route('/main', methods=['GET'])
+def main():
+    try:
+        return redirect(url_for('selected'))
     except:
         TB.print_exc()
         return redirect(url_for('logout'))
@@ -114,17 +131,6 @@ def logout():
     except:
         TB.print_exc()
         return redirect(url_for('index'))
-
-# 课程查询
-@app.route('/feedback', methods=['GET'])
-def feedback():
-    try:
-        global Global
-        a = Global['MyAgent'](request)
-        return render_template('feedback.html', agent = a)
-    except:
-        TB.print_exc()
-        return redirect(url_for('logout'))
 
 '''''''''''''''''''''''''''''''''''''''''''''
                     API Start
@@ -236,4 +242,14 @@ def program_error(error):
     return render_template('error.html')
 
 if __name__ == '__main__':
+    ValidCodeModel = ValidCode()
+    '''
+    Start bug: 必須建立模型後隨便預測一次，否則出錯。
+    '''
+    images_f, numbers_f = LoadForwardData('static/img/validcode/1136.test.jpg')
+    print(ValidCodeModel.Forward(images_f))
+    '''
+    End bug
+    '''
     app.run(port=80, host='0.0.0.0', debug=True)
+

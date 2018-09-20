@@ -73,13 +73,15 @@
                 </li>
                 {% endif %}
             </ul>
-            {% set vc = agent.GetValidCode() %}
             {% if not agent.Logined %}
+            {% set vc_path = agent.GetValidCode() %}
+            {% set r = vcread(vc_path[1]) %}
+            {% set vc_answer = vc.Forward(r[0]) %}
             <form class="form-inline">
                 <input type="text" class="form-control form-control-sm mb-2 mr-sm-2" id="usernameTXT" placeholder="學號" required>
                 <input type="password" class="form-control form-control-sm mb-2 mr-sm-2" id="passwordTXT" placeholder="密碼" required>
-                <img src="/img/validcode/{{ vc[0] }}" class='form-control form-control-sm mb-2 mr-sm-2'>
-                <input type="text" class="form-control form-control-sm mb-2 mr-sm-2" id="validcodeTXT" data-src="{{ vc[0] }}"
+                <img src="/img/validcode/{{ vc_path[0] }}" class='form-control form-control-sm mb-2 mr-sm-2'>
+                <input type="text" class="form-control form-control-sm mb-2 mr-sm-2" id="validcodeTXT" data-src="{{ vc_path[0] }}" value="{{ vc_answer }}"
                     placeholder="驗證碼" required>
                 <button id='loginBTN' type="button" class="btn btn-primary btn-sm mb-2 form-control">登入</button>
             </form>
